@@ -1,0 +1,206 @@
+/* Global Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* CSS Variables for Terminal Theme */
+:root {
+  /* Colors */
+  --terminal-bg: #000000;
+  --terminal-fg: #00ff00;
+  --terminal-fg-dim: #00aa00;
+  --terminal-fg-bright: #00ff7f;
+  --terminal-border: #00ff00;
+  --terminal-error: #ff0000;
+  --terminal-success: #00ff00;
+  --terminal-warning: #ffff00;
+
+  /* Typography */
+  --font-mono: 'Courier New', Courier, 'Lucida Console', Monaco, monospace;
+  --font-size-base: 14px;
+  --font-size-large: 16px;
+  --font-size-small: 12px;
+
+  /* Effects */
+  --scan-line-opacity: 0.02;
+  --glow-strength: 5px;
+  --box-shadow-glow: 0 0 10px var(--terminal-fg);
+}
+
+/* Body Styling */
+body {
+  background-color: var(--terminal-bg);
+  color: var(--terminal-fg);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* CRT Scanline Effect */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 9999;
+  opacity: var(--scan-line-opacity);
+}
+
+/* Screen Flicker Animation - DISABLED (too distracting) */
+/*
+@keyframes flicker {
+  0% {
+    opacity: 0.97;
+  }
+  5% {
+    opacity: 1;
+  }
+  10% {
+    opacity: 0.97;
+  }
+  15% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0.97;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.97;
+  }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--terminal-bg);
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0;
+  animation: flicker 0.15s infinite;
+}
+*/
+
+/* Text Glow Effect */
+.terminal-text,
+.terminal-header,
+.terminal-label,
+.terminal-button {
+  text-shadow: 0 0 5px var(--terminal-fg), 0 0 var(--glow-strength) var(--terminal-fg);
+}
+
+/* Utility Classes */
+.mono {
+  font-family: var(--font-mono);
+  letter-spacing: 1px;
+}
+
+.break-all {
+  word-break: break-all;
+}
+
+.error {
+  color: var(--terminal-error) !important;
+  text-shadow: 0 0 5px var(--terminal-error),
+    0 0 var(--glow-strength) var(--terminal-error);
+}
+
+.success {
+  color: var(--terminal-success) !important;
+  text-shadow: 0 0 5px var(--terminal-success),
+    0 0 var(--glow-strength) var(--terminal-success);
+}
+
+.warning {
+  color: var(--terminal-warning) !important;
+  text-shadow: 0 0 5px var(--terminal-warning),
+    0 0 var(--glow-strength) var(--terminal-warning);
+}
+
+.small {
+  font-size: var(--font-size-small);
+  opacity: 0.8;
+}
+
+/* Blinking Cursor Animation */
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.cursor::after {
+  content: '█';
+  animation: blink 1s infinite;
+  margin-left: 2px;
+}
+
+/* Links */
+a {
+  color: var(--terminal-fg-bright);
+  text-decoration: none;
+  text-shadow: 0 0 5px var(--terminal-fg-bright);
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  text-shadow: 0 0 15px var(--terminal-fg-bright);
+  text-decoration: underline;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--terminal-bg);
+  border: 1px solid var(--terminal-fg-dim);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--terminal-fg-dim);
+  border: 1px solid var(--terminal-fg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--terminal-fg);
+  box-shadow: 0 0 10px var(--terminal-fg);
+}
+
+/* Selection Styling */
+::selection {
+  background: var(--terminal-fg);
+  color: var(--terminal-bg);
+}
+
+::-moz-selection {
+  background: var(--terminal-fg);
+  color: var(--terminal-bg);
+}
